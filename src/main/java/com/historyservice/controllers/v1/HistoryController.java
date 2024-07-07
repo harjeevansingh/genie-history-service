@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/history")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HistoryController {
 
     @Autowired
