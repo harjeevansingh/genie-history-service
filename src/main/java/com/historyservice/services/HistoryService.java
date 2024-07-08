@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,17 +19,6 @@ public class HistoryService {
 
     @Autowired
     private ChatMessageDAO chatMessageDAO;
-
-    @KafkaListener(topics = "chat_messages", groupId = "history-service")
-    public void consumeChatMessage(ChatMessageDTO messageDTO) {
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setConversationId(messageDTO.getConversationId());
-        chatMessage.setUserId(messageDTO.getUserId());
-        chatMessage.setContent(messageDTO.getContent());
-        chatMessage.setSenderType(messageDTO.getSenderType());
-        chatMessage.setTimestamp(messageDTO.getTimestamp());
-        chatMessageDAO.save(chatMessage);
-    }
 
     public Page<ChatMessageDTO> getChatHistory(Long conversationId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "timestamp"));
